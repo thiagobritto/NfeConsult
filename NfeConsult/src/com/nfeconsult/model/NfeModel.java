@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class NfeModel {
+	
 	private String code;
 	private StoreModel store;
 	private ClientModel client;

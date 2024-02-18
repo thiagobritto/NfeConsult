@@ -7,6 +7,7 @@ import com.nfeconsult.service.NfeService;
 import com.nfeconsult.service.PathService;
 
 public class NfeController {
+	
 	public static ArrayList<NfeModel> getList(String dir) {
 		try {
 			ArrayList<String> nfeListPath = PathService.findFilesXMLr(dir);

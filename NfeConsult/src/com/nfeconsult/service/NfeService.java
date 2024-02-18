@@ -17,6 +17,7 @@ import com.nfeconsult.model.ProductModel;
 import com.nfeconsult.model.StoreModel;
 
 public class NfeService {
+	
 	private static Document doc;
 
 	public static NfeModel readXML(NfeModel nfeModel, String path)

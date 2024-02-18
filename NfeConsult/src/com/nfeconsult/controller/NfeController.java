@@ -1,5 +1,6 @@
 package com.nfeconsult.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.nfeconsult.model.NfeModel;
@@ -8,7 +9,9 @@ import com.nfeconsult.service.PathService;
 
 public class NfeController {
 	
-	public static ArrayList<NfeModel> getList(String dir) {
+	public static ArrayList<NfeModel> getList(String path) {
+		File dir = new File(path);
+		if(!dir.isDirectory()) return null;
 		try {
 			ArrayList<String> nfeListPath = PathService.findFilesXMLr(dir);
 			ArrayList<NfeModel> nfeList = new ArrayList<NfeModel>();

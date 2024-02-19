@@ -6,25 +6,30 @@ import java.util.ArrayList;
 import com.nfeconsult.model.NfeModel;
 import com.nfeconsult.service.NfeService;
 import com.nfeconsult.service.PathService;
+import com.nfeconsult.view.DialogException;
 
 public class NfeController {
 	
-	public static ArrayList<NfeModel> getList(String path) {
-		File dir = new File(path);
-		if(!dir.isDirectory()) return null;
-		try {
-			ArrayList<String> nfeListPath = PathService.findFilesXMLr(dir);
-			ArrayList<NfeModel> nfeList = new ArrayList<NfeModel>();
-			
-			for (int i = 0; i < nfeListPath.size(); i++) {
-				NfeModel nfe = NfeService.readXML(new NfeModel(), nfeListPath.get(i));
-				if(nfe==null) continue;
-				nfeList.add(nfe);
-			}
-			return nfeList;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+	private static ArrayList<NfeModel> nfeList;
+
+	public static ArrayList<NfeModel> searchNfes(String dir) throws DialogException {
+		File path = new File(dir.trim());
+		
+		if(!path.isDirectory())
+			throw new DialogException("Esse diretorio não é valido!");
+		
+		ArrayList<String> nfeListPath = PathService.findFilesXMLr(path);
+		nfeList = new ArrayList<NfeModel>();
+		for (int i = 0; i < nfeListPath.size(); i++) {
+			NfeModel nfe = NfeService.readXML(new NfeModel(), nfeListPath.get(i));
+			if(nfe==null) continue;
+			nfeList.add(nfe);
 		}
-		return null;
+		
+		if(nfeList.size() < 1)
+			throw new DialogException("Nenhum arquivo foi encontrado!");
+		
+		return nfeList;
 	}
+
 }

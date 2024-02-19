@@ -23,7 +23,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.ArrayList;
 
 public class Home extends JFrame {
@@ -36,8 +35,6 @@ public class Home extends JFrame {
 
 	private DefaultListModel<String> listModelProduct;
 	private Integer listIndexSelected;
-	private ArrayList<NfeModel> nfeList;
-
 	/**
 	 * Launch the application.
 	 */
@@ -161,13 +158,11 @@ public class Home extends JFrame {
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String path = txtPathDir.getText();
-					nfeList = NfeController.getList(path);
-					if (nfeList!=null) {
-						System.out.println(nfeList.size());
-					}
-				} catch (Exception e2) {
-					System.out.println(e2.getMessage());
+					String input = txtPathDir.getText();
+					ArrayList<NfeModel> nfes = NfeController.searchNfes(input);
+					System.out.println(nfes);
+				} catch (DialogException err) {
+					err.dialogMessage();
 				}
 			}
 		});

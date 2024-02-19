@@ -20,12 +20,21 @@ public class NfeService {
 	
 	private static Document doc;
 
-	public static NfeModel readXML(NfeModel nfeModel, String path)
-			throws ParserConfigurationException, SAXException, IOException {
-		//teste
+	public static NfeModel readXML(NfeModel nfeModel, String path){
+		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		doc = builder.parse(path);
+		DocumentBuilder builder;
+		
+		try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(path);
+		} catch (ParserConfigurationException e) {
+			// Factory Exception
+			e.printStackTrace();
+		} catch (SAXException | IOException e) {
+			// Factory Exception
+			e.printStackTrace();
+		}
 		
 		String code = getCode();
 		if(code==null) return null;

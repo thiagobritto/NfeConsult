@@ -5,9 +5,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import com.nfeconsult.controller.NfeController;
 import com.nfeconsult.model.NfeModel;
+import com.nfeconsult.service.TableService;
 
 import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
@@ -24,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import javax.swing.SwingConstants;
 
 public class Home extends JFrame {
 
@@ -32,10 +35,12 @@ public class Home extends JFrame {
 	private JTextField txtPathDir;
 	private JTextField txtAddFilter;
 	private JTable tabNfeList;
+	private JLabel lblResults;
 
 	private DefaultListModel<String> listModelProduct;
 	private Integer listIndexSelected;
 	private ArrayList<NfeModel> listNfeModel;
+	private DefaultTableModel tableModel = new DefaultTableModel();
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -71,12 +76,13 @@ public class Home extends JFrame {
 		panel.setLayout(null);
 
 		txtPathDir = new JTextField();
-		txtPathDir.setFont(new Font("Arial", Font.PLAIN, 11));
 		txtPathDir.setBounds(10, 10, 244, 23);
+		txtPathDir.setFont(new Font("Arial", Font.PLAIN, 11));
 		panel.add(txtPathDir);
 		txtPathDir.setColumns(10);
 
 		JButton btnSelectPathDir = new JButton("Selecione uma pasta");
+		btnSelectPathDir.setBounds(264, 10, 180, 23);
 		btnSelectPathDir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
@@ -93,12 +99,11 @@ public class Home extends JFrame {
 			}
 		});
 		btnSelectPathDir.setFont(new Font("Arial", Font.BOLD, 11));
-		btnSelectPathDir.setBounds(264, 10, 180, 23);
 		panel.add(btnSelectPathDir);
 
 		JLabel lblNewLabel = new JLabel("Busca por produto:");
-		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 11));
 		lblNewLabel.setBounds(11, 48, 108, 14);
+		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 11));
 		panel.add(lblNewLabel);
 
 		ActionListener addProductEvent = new ActionListener() {
@@ -112,12 +117,13 @@ public class Home extends JFrame {
 		};
 
 		JButton btnAddFilter = new JButton("Adicionar");
+		btnAddFilter.setBounds(264, 43, 90, 23);
 		btnAddFilter.addActionListener(addProductEvent);
 		btnAddFilter.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnAddFilter.setBounds(264, 43, 90, 23);
 		panel.add(btnAddFilter);
 
 		JButton btnRemoveFilter = new JButton("Excluir");
+		btnRemoveFilter.setBounds(364, 43, 80, 23);
 		btnRemoveFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (listIndexSelected != null) {
@@ -127,13 +133,12 @@ public class Home extends JFrame {
 			}
 		});
 		btnRemoveFilter.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnRemoveFilter.setBounds(364, 43, 80, 23);
 		panel.add(btnRemoveFilter);
 
 		txtAddFilter = new JTextField();
+		txtAddFilter.setBounds(120, 43, 134, 23);
 		txtAddFilter.addActionListener(addProductEvent);
 		txtAddFilter.setFont(new Font("Arial", Font.PLAIN, 11));
-		txtAddFilter.setBounds(120, 43, 134, 23);
 		panel.add(txtAddFilter);
 		txtAddFilter.setColumns(10);
 
@@ -154,33 +159,49 @@ public class Home extends JFrame {
 		scrollPaneFilters.setViewportView(listFilters);
 
 		JButton btnFind = new JButton("Buscar");
+		btnFind.setBounds(369, 231, 75, 23);
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					listNfeModel = NfeController.searchNfes(txtPathDir.getText());
-					System.out.println(listNfeModel.size());
 					listNfeModel = NfeController.filterByProducts(listModelProduct);
-					System.out.println(listNfeModel.size());
+					TableService.preencherTabela(tableModel, listNfeModel);
+					lblResults.setText(Integer.toString(listNfeModel.size()));
 				} catch (DialogException err) {
 					err.dialogMessage("Aviso", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
 		btnFind.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnFind.setBounds(369, 231, 75, 23);
 		panel.add(btnFind);
 
 		JButton btnGenerateCSV = new JButton("Gerar CSV");
+		btnGenerateCSV.setBounds(10, 231, 89, 23);
 		btnGenerateCSV.setFont(new Font("Arial", Font.PLAIN, 11));
 		btnGenerateCSV.setEnabled(false);
-		btnGenerateCSV.setBounds(10, 231, 89, 23);
 		panel.add(btnGenerateCSV);
 
 		JScrollPane scrollPaneNfe = new JScrollPane();
 		scrollPaneNfe.setBounds(10, 146, 434, 75);
 		panel.add(scrollPaneNfe);
-
-		tabNfeList = new JTable();
+		
+		tableModel.addColumn("Nota");
+		tableModel.addColumn("Cliente");
+		tableModel.addColumn("CPF/CNPJ");
+		
+		tabNfeList = new JTable(tableModel);
+		tabNfeList.getColumnModel().getColumn(0).setPreferredWidth(50);
+		tabNfeList.getColumnModel().getColumn(1).setPreferredWidth(200);
+		tabNfeList.getColumnModel().getColumn(2).setPreferredWidth(80);
 		scrollPaneNfe.setViewportView(tabNfeList);
+		
+		JLabel lblNewLabel_1 = new JLabel("resultados");
+		lblNewLabel_1.setBounds(230, 234, 75, 14);
+		panel.add(lblNewLabel_1);
+		
+		lblResults = new JLabel("0");
+		lblResults.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblResults.setBounds(180, 235, 46, 14);
+		panel.add(lblResults);
 	}
 }

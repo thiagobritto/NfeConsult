@@ -36,26 +36,4 @@ public class NfeController {
 		return nfeList;
 	}
 
-	public static ArrayList<NfeModel> 
-	filterByProducts(DefaultListModel<String> listProducts) {
-		if(listProducts.isEmpty()) return nfeList;
-		
-		ArrayList<NfeModel> newNfeList = new ArrayList<NfeModel>();
-		for (int i = 0; i < nfeList.size(); i++) {
-			Boolean econtrou = false;
-			ProductModel[] prod = nfeList.get(i).getProducts();
-			for (int j = 0; j < prod.length; j++) {
-				String desc = prod[j].getDesc();
-				for (int x = 0; x < listProducts.size(); x++) {
-					if(desc.contains(listProducts.get(x))) {
-						econtrou = true;
-						break;
-					}
-				}
-								
-			}
-			if(econtrou) newNfeList.add(nfeList.get(i));
-		}
-		return newNfeList;
-	}
 }

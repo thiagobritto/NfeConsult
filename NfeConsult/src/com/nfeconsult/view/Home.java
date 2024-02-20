@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.nfeconsult.controller.NfeController;
 import com.nfeconsult.model.NfeModel;
+import com.nfeconsult.service.NfeService;
 import com.nfeconsult.service.TableService;
 
 import javax.swing.JTextField;
@@ -164,7 +165,7 @@ public class Home extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					listNfeModel = NfeController.searchNfes(txtPathDir.getText());
-					listNfeModel = NfeController.filterByProducts(listModelProduct);
+					listNfeModel = NfeService.filterByProducts(listNfeModel, listModelProduct);
 					TableService.preencherTabela(tableModel, listNfeModel);
 					lblResults.setText(Integer.toString(listNfeModel.size()));
 				} catch (DialogException err) {

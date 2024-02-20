@@ -35,9 +35,8 @@ public class Home extends JFrame {
 
 	private DefaultListModel<String> listModelProduct;
 	private Integer listIndexSelected;
-	/**
-	 * Launch the application.
-	 */
+	private ArrayList<NfeModel> listNfeModel;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -88,8 +87,8 @@ public class Home extends JFrame {
 				if (chooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
 					txtPathDir.setText(chooser.getSelectedFile().getPath());
 				} else {
-					JOptionPane.showMessageDialog(panel, "Nenhum diretorio foi selecionado", "Aviso",
-							JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(panel, "Nenhum diretorio foi selecionado!", 
+							"Aviso", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -158,11 +157,12 @@ public class Home extends JFrame {
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String input = txtPathDir.getText();
-					ArrayList<NfeModel> nfes = NfeController.searchNfes(input);
-					System.out.println(nfes);
+					listNfeModel = NfeController.searchNfes(txtPathDir.getText());
+					System.out.println(listNfeModel.size());
+					listNfeModel = NfeController.filterByProducts(listModelProduct);
+					System.out.println(listNfeModel.size());
 				} catch (DialogException err) {
-					err.dialogMessage();
+					err.dialogMessage("Aviso", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});

@@ -6,12 +6,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import com.nfeconsult.interfaces.UserDecides;
 import com.nfeconsult.model.NfeModel;
-import com.nfeconsult.model.ProductModel;
 import com.nfeconsult.service.NfeService;
 
 public class HomeController {

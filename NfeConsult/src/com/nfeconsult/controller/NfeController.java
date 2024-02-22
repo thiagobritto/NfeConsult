@@ -3,10 +3,7 @@ package com.nfeconsult.controller;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.DefaultListModel;
-
 import com.nfeconsult.model.NfeModel;
-import com.nfeconsult.model.ProductModel;
 import com.nfeconsult.service.NfeService;
 import com.nfeconsult.service.PathService;
 import com.nfeconsult.view.DialogException;

@@ -33,9 +33,11 @@ public class NfeService {
 		} catch (ParserConfigurationException e) {
 			// Factory Exception
 			e.printStackTrace();
+			return null;
 		} catch (SAXException | IOException e) {
 			// Factory Exception
 			e.printStackTrace();
+			return null;
 		}
 		
 		String code = getCode();
@@ -135,10 +137,12 @@ public class NfeService {
 		for (int i = 0; i < products.getLength(); i++) {
 			ProductModel product = new ProductModel();
 			NodeList prodList = products.item(i).getChildNodes();
+			Node code = getNode(prodList, "cProd");
 			Node desc = getNode(prodList, "xProd");
 			Node qtd = getNode(prodList, "qCom");
 			Node uVal = getNode(prodList, "vUnCom");
 			Node tVal = getNode(prodList, "vProd");
+			if(code!=null) product.setCode(code.getTextContent());
 			if(desc!=null) product.setDesc(desc.getTextContent());
 			if(qtd!=null) product.setQtd(qtd.getTextContent());
 			if(uVal!=null) product.setuVal(uVal.getTextContent());
@@ -154,5 +158,39 @@ public class NfeService {
 			if(node.getNodeName().equals(tag)) return node;
 		}
 		return null;
+	}
+	
+	public static String prepareCSV(ArrayList<NfeModel> listNfeModel) {
+		String csv = "";
+
+		for (NfeModel nfe : listNfeModel) {
+			csv += nfe.getCode() + ";;;\n";
+			
+			String name = (nfe.getClient().getName()==null) ? "": nfe.getClient().getName();
+			String code = (nfe.getClient().getCode()==null) ? "": nfe.getClient().getCode();
+			String address = (nfe.getClient().getAddress()==null) ? "": nfe.getClient().getAddress();
+			String zone = (nfe.getClient().getZone()==null) ? "": nfe.getClient().getZone();
+			String city = (nfe.getClient().getCity()==null) ? "": nfe.getClient().getCity();
+			String uf = (nfe.getClient().getUf()==null) ? "": nfe.getClient().getUf();
+			
+			csv += "Nome;" + name + ";;;\n";
+			csv += "CPF/CNPJ;" + code + ";;;\n";
+			csv += "Endereço;" + address + ";;;\n";
+			csv += "Bairro;" + zone + ";;;\n";
+			csv += "Cidade;" + city + ";;UF;" + uf + "\n";
+			
+			csv += "Codigo;Descrição;Qtd;Valor;Total\n";
+			Float sum = 0f;
+			for(ProductModel prod: nfe.getProducts()) {
+				csv += prod.getCode() +";"+ prod.getDesc() +";"+ 
+						Float.toString(prod.getQtd()).replace(".", ",") +";"+ 
+						Float.toString(prod.getuVal()).replace(".", ",") +";"+ 
+						Float.toString(prod.gettVal()).replace(".", ",") + "\n";
+				sum += prod.gettVal();
+			}
+			
+			csv += ";;;;"+ Float.toString(sum).replace(".", ",")+"\n\n\n";
+		}
+		return csv;
 	}
 }

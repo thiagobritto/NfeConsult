@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.nfeconsult.interfaces.UserDecides;
+import com.nfeconsult.controller.HomeController;
 import com.nfeconsult.controller.NfeController;
 import com.nfeconsult.model.NfeModel;
 import com.nfeconsult.service.NfeService;
@@ -28,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.SwingConstants;
+import java.awt.Toolkit;
 
 public class Home extends JFrame {
 
@@ -37,6 +40,7 @@ public class Home extends JFrame {
 	private JTextField txtAddFilter;
 	private JTable tabNfeList;
 	private JLabel lblResults;
+	private JButton btnGenerateCSV;
 
 	private DefaultListModel<String> listModelProduct;
 	private Integer listIndexSelected;
@@ -60,6 +64,7 @@ public class Home extends JFrame {
 	 * Create the frame.
 	 */
 	public Home() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Home.class.getResource("/com/nfeconsult/img/icon.png")));
 		setResizable(false);
 		setTitle("thiagobritto.github.io - NfeConsult - v1.0.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,26 +82,25 @@ public class Home extends JFrame {
 		panel.setLayout(null);
 
 		txtPathDir = new JTextField();
+		txtPathDir.setEditable(false);
 		txtPathDir.setBounds(10, 10, 244, 23);
 		txtPathDir.setFont(new Font("Arial", Font.PLAIN, 11));
 		panel.add(txtPathDir);
 		txtPathDir.setColumns(10);
-
+		
 		JButton btnSelectPathDir = new JButton("Selecione uma pasta");
 		btnSelectPathDir.setBounds(264, 10, 180, 23);
-		btnSelectPathDir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				chooser.setDialogTitle("Selecione uma pasta");
-				chooser.setApproveButtonText("Selecionar pasta");
-				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-				if (chooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
-					txtPathDir.setText(chooser.getSelectedFile().getPath());
-				} else {
-					JOptionPane.showMessageDialog(panel, "Nenhum diretorio foi selecionado!", 
-							"Aviso", JOptionPane.WARNING_MESSAGE);
-				}
+		btnSelectPathDir.addActionListener( e -> {
+			JFileChooser open = new JFileChooser();
+			open.setDialogTitle("Selecione uma pasta");
+			open.setApproveButtonText("Selecionar pasta");
+			open.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int val = open.showOpenDialog(Home.this);
+			if (val == JFileChooser.APPROVE_OPTION) {
+				txtPathDir.setText(open.getSelectedFile().getPath());
+			} else {
+				JOptionPane.showMessageDialog(Home.this, "Nenhum diretorio foi selecionado!", 
+						"Aviso", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 		btnSelectPathDir.setFont(new Font("Arial", Font.BOLD, 11));
@@ -107,14 +111,12 @@ public class Home extends JFrame {
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 11));
 		panel.add(lblNewLabel);
 
-		ActionListener addProductEvent = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String prodName = txtAddFilter.getText().trim().toUpperCase();
-				if (!listModelProduct.contains(prodName) && !prodName.isEmpty())
-					listModelProduct.addElement(prodName);
-				txtAddFilter.setText("");
-				txtAddFilter.requestFocus();
-			}
+		ActionListener addProductEvent = e -> {
+			String prodName = txtAddFilter.getText().trim().toUpperCase();
+			if (!listModelProduct.contains(prodName) && !prodName.isEmpty())
+				listModelProduct.addElement(prodName);
+			txtAddFilter.setText("");
+			txtAddFilter.requestFocus();
 		};
 
 		JButton btnAddFilter = new JButton("Adicionar");
@@ -125,12 +127,10 @@ public class Home extends JFrame {
 
 		JButton btnRemoveFilter = new JButton("Excluir");
 		btnRemoveFilter.setBounds(364, 43, 80, 23);
-		btnRemoveFilter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (listIndexSelected != null) {
-					listModelProduct.removeElementAt(listIndexSelected);
-					listIndexSelected = null;
-				}
+		btnRemoveFilter.addActionListener(e -> {
+			if (listIndexSelected != null) {
+				listModelProduct.removeElementAt(listIndexSelected);
+				listIndexSelected = null;
 			}
 		});
 		btnRemoveFilter.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -161,22 +161,41 @@ public class Home extends JFrame {
 
 		JButton btnFind = new JButton("Buscar");
 		btnFind.setBounds(369, 231, 75, 23);
-		btnFind.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					listNfeModel = NfeController.searchNfes(txtPathDir.getText());
-					listNfeModel = NfeService.filterByProducts(listNfeModel, listModelProduct);
-					TableService.preencherTabela(tableModel, listNfeModel);
-					lblResults.setText(Integer.toString(listNfeModel.size()));
-				} catch (DialogException err) {
-					err.dialogMessage("Aviso", JOptionPane.WARNING_MESSAGE);
-				}
+		btnFind.addActionListener(e -> {
+			try {
+				listNfeModel = NfeController.searchNfes(txtPathDir.getText());
+				listNfeModel = NfeService.filterByProducts(listNfeModel, listModelProduct);
+				TableService.preencherTabela(tableModel, listNfeModel);
+				lblResults.setText(Integer.toString(listNfeModel.size()));
+				btnGenerateCSV.setEnabled(true);
+			} catch (DialogException err) {
+				err.dialogMessage("Aviso", JOptionPane.WARNING_MESSAGE);
 			}
 		});
 		btnFind.setFont(new Font("Arial", Font.PLAIN, 11));
 		panel.add(btnFind);
 
-		JButton btnGenerateCSV = new JButton("Gerar CSV");
+		btnGenerateCSV = new JButton("Gerar CSV");
+		btnGenerateCSV.addActionListener(e -> {
+			JFileChooser save = new JFileChooser();
+			int show = save.showSaveDialog(Home.this);
+			if (show == JFileChooser.APPROVE_OPTION) {
+				String path = save.getSelectedFile().getPath();
+				boolean res = HomeController.gerarCSV(path, listNfeModel, new UserDecides() {
+					public int confirm() {
+						return  JOptionPane.showConfirmDialog(save, 
+							"Deseja Subtituir o arquivo",
+							"Confimação", JOptionPane.YES_OPTION);
+					}
+				});
+				if(res) {
+					JOptionPane.showMessageDialog(save, "Salvo com sucesso!", 
+							"Salvo", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					btnGenerateCSV.doClick();
+				}
+			}
+		});
 		btnGenerateCSV.setBounds(10, 231, 89, 23);
 		btnGenerateCSV.setFont(new Font("Arial", Font.PLAIN, 11));
 		btnGenerateCSV.setEnabled(false);

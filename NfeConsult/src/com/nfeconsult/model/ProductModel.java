@@ -3,6 +3,7 @@ package com.nfeconsult.model;
 import java.util.Objects;
 
 public class ProductModel {
+	private String code;
 	private String desc;
 	private Float qtd;
 	private Float uVal;
@@ -59,6 +60,12 @@ public class ProductModel {
 		ProductModel other = (ProductModel) obj;
 		return Objects.equals(desc, other.desc) && Objects.equals(qtd, other.qtd) && Objects.equals(tVal, other.tVal)
 				&& Objects.equals(uVal, other.uVal);
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 }

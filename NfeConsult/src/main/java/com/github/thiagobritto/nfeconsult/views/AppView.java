@@ -1,27 +1,20 @@
 package com.github.thiagobritto.nfeconsult.views;
 
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import com.github.thiagobritto.nfeconsult.controllers.FilterListController;
-import com.github.thiagobritto.nfeconsult.models.FilterListModel;
+import javax.swing.JDesktopPane;
 
 public class AppView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtAdd;
 	
-	private FilterListController filterList = new FilterListController();
-
 	/**
 	 * Launch the application.
 	 */
@@ -50,26 +43,19 @@ public class AppView extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JPanel panelPrincipal = new JPanel();
-		panelPrincipal.setBounds(0, 0, 434, 105);
-		contentPane.add(panelPrincipal);
-		panelPrincipal.setLayout(null);
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 434, 22);
+		contentPane.add(menuBar);
 		
-		txtAdd = new JTextField();
-		txtAdd.setBounds(185, 26, 122, 20);
-		panelPrincipal.add(txtAdd);
-		txtAdd.setColumns(10);
+		JMenu mnCadastro = new JMenu("Cadastro");
+		menuBar.add(mnCadastro);
 		
-		JButton btnTeste = new JButton("add");
-		btnTeste.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FilterListModel fl = (FilterListModel) filterList.get(20);
-				if (fl!=null)
-					JOptionPane.showMessageDialog(null, fl.getDescription());
-			}
-		});
-		btnTeste.setBounds(317, 25, 89, 23);
-		panelPrincipal.add(btnTeste);
+		JMenuItem miCadastrarFiltros = new JMenuItem("Cadastrar filtros");
+		mnCadastro.add(miCadastrarFiltros);
+		
+		JDesktopPane desktopPane = new JDesktopPane();
+		desktopPane.setBounds(10, 33, 289, 217);
+		contentPane.add(desktopPane);
 		
 	}
 }

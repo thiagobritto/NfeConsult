@@ -7,5 +7,5 @@ public interface DAOInterface {
 	public Boolean update(Object model);
 	public Boolean delete(Integer id);
 	public Object show(Integer id);
-	public ArrayList<Object> show();
+	public ArrayList<?> show();
 }

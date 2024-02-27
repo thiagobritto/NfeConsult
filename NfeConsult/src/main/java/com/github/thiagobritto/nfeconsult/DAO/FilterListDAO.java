@@ -97,7 +97,7 @@ public class FilterListDAO implements DAOInterface {
 	}
 	
 	@Override
-	public Object show(Integer id) {
+	public FilterListModel show(Integer id) {
 		try {
 			prepare = con.prepareStatement(READ_ITEM);
 			prepare.setInt(1, id);
@@ -113,10 +113,10 @@ public class FilterListDAO implements DAOInterface {
 	}
 	
 	@Override
-	public ArrayList<Object> show(){
+	public ArrayList<FilterListModel> show(){
 		try {
 			result = con.createStatement().executeQuery(READ_ALL_ITEM);
-			ArrayList<Object> listItemModel = new ArrayList<Object>();
+			ArrayList<FilterListModel> listItemModel = new ArrayList<FilterListModel>();
 			while (result.next()) {
 				listItemModel.add(
 					new FilterListModel(result.getInt("id"), result.getString("name"))

@@ -21,6 +21,29 @@ uma experiência ainda melhor.
 
 Se surgirem mais dúvidas ou se precisar de assistência adicional, estamos à disposição!
 
+# Apresentação dos dados
+
+> Os dados do CSV, assim que abertos no software de planilha,
+> serão apresentados no seguinte formato.
+
+|   | A | B | C | D | E |
+|---|---|---|---|---|---|
+| 1  |00001|Numero da nota|   |   |   |
+| 2  |Nome|Nome do cliente|   |   |   |
+| 3  |CPF/CNPJ|00000000000|   |   |   |
+| 4  |Endereço|Endereço do cliente|   |   |   |
+| 5  |Bairro|Bairro do cliente|   |   |   |
+| 6  |Cidade|Cidade do cliente|   |UF|uf|
+| 7  |Código|Descrição|Qtd|Valor|Total|
+| 8  |0001|PRODUTO_1|1|3,50|3,50|
+| 9  |0002|PRODUTO_2|5|5,00|25,00|
+| 10 |0003|PRODUTO_3|10|8,50|85,00|
+| 11 | | | | |113,50|
+| 12 | | | | | |
+| 13 | | | | | |
+| 14  |00002|Numero da nota|   |   |   |
+| ... | | | | | |
+
 # Tecnologias utilizadas
 
 - Java 17

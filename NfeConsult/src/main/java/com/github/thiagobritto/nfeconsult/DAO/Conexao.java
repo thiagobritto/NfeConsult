@@ -11,7 +11,7 @@ public class Conexao {
 	private Conexao() {
 		try {
 			if(CONEXAO == null || CONEXAO.isClosed()) {
-				String url = "jdbc:sqlite:src/main/java/com/github/thiagobritto/nfeconsult/resources/sample.db";
+				String url = "jdbc:sqlite:src/main/java/com/github/thiagobritto/nfeconsult/resources/files/database.db";
 				CONEXAO = DriverManager.getConnection(url);
 			}			
 		} catch (SQLException e) {

@@ -2,22 +2,15 @@ package com.github.thiagobritto.nfeconsult.views;
 
 import java.awt.EventQueue;
 
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import com.github.thiagobritto.nfeconsult.controllers.FilterListController;
 
 public class AppView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private FilterListController flc = new FilterListController();
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -44,21 +37,6 @@ public class AppView extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 434, 22);
-		contentPane.add(menuBar);
-		
-		JMenu mnCadastro = new JMenu("Cadastro");
-		menuBar.add(mnCadastro);
-		
-		JMenuItem miCadastrarFiltros = new JMenuItem("Cadastrar filtros");
-		mnCadastro.add(miCadastrarFiltros);
-		
-		JDesktopPane desktopPane = new JDesktopPane();
-		desktopPane.setBounds(10, 33, 289, 217);
-		contentPane.add(desktopPane);
-		
 	}
+
 }

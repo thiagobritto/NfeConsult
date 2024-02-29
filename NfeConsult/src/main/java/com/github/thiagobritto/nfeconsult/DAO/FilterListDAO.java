@@ -18,7 +18,9 @@ public class FilterListDAO implements FilterListDAOInterface {
 	private final String CREATE_TABLE = 
 		"CREATE TABLE IF NOT EXISTS filter_list (" 
 		+ "id INTEGER, "
-		+ "name TEXT NOT NULL UNIQUE, " + "PRIMARY KEY (id AUTOINCREMENT)" + ");";
+		+ "name TEXT NOT NULL UNIQUE, " 
+		+ "PRIMARY KEY (id AUTOINCREMENT)" 
+		+ ");";
 
 	private final String CREATE_ITEM = 
 		"INSERT INTO filter_list (id, name) VALUES (NULL, ?)";
@@ -51,51 +53,45 @@ public class FilterListDAO implements FilterListDAOInterface {
 	}
 
 	@Override
-	public Boolean save(FilterListModel model) {
+	public Integer save(FilterListModel model) {
 		try {
 			prepare = con.prepareStatement(CREATE_ITEM);
 			prepare.setString(1, model.getDescription());
-			int res = prepare.executeUpdate();
-			if (res > 0)
-				return true;
+			return prepare.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Houve um erro ao inserir um item em: filter_list.");
 			e.printStackTrace();
+			return 0;
 		}
-		return false;
 	}
 
 	@Override
-	public Boolean update(FilterListModel model) {
+	public Integer update(FilterListModel model) {
 		try {
 			prepare = con.prepareStatement(UPDATE_ITEM);
 			prepare.setString(1, model.getDescription());
 			prepare.setInt(2, model.getId());
-			int res = prepare.executeUpdate();
-			if (res > 0)
-				return true;
+			return prepare.executeUpdate();			
 		} catch (SQLException e) {
 			System.out.println(
 				"Houve um erro ao atualizar o item " 
 				+ model.getId() + " em: filter_list.");
 			e.printStackTrace();
+			return 0;
 		}
-		return false;
 	}
 
 	@Override
-	public Boolean delete(Integer id) {
+	public Integer delete(Integer id) {
 		try {
 			prepare = con.prepareStatement(DELETE_ITEM);
 			prepare.setInt(1, id);
-			int res = prepare.executeUpdate();
-			if (res > 0)
-				return true;
+			return prepare.executeUpdate();			
 		} catch (SQLException e) {
 			System.out.println("Houve um erro ao deletar o item " + id + " em: filter_list.");
 			e.printStackTrace();
+			return 0;
 		}
-		return false;
 	}
 
 	@Override
@@ -104,16 +100,15 @@ public class FilterListDAO implements FilterListDAOInterface {
 			prepare = con.prepareStatement(READ_ITEM);
 			prepare.setInt(1, id);
 			result = prepare.executeQuery();
-			if (result.next())
-				return new FilterListModel(
-					result.getInt("id"), 
-					result.getString("name"));
+			return new FilterListModel(
+				result.getInt("id"), 
+				result.getString("name"));
 
 		} catch (SQLException e) {
 			System.out.println("Houve um erro ao buscar o item " + id + " em: filter_list.");
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	@Override
@@ -123,17 +118,16 @@ public class FilterListDAO implements FilterListDAOInterface {
 			ArrayList<FilterListModel> newFilterList = 
 				new ArrayList<FilterListModel>();
 			while (result.next()) {
-				newFilterList.add(new FilterListModel(
+				newFilterList.add( new FilterListModel(
 					result.getInt("id"), 
 					result.getString("name")));
 			}
-			if (newFilterList.size() > 0)
-				return newFilterList;
-
+			return newFilterList;
 		} catch (SQLException e) {
 			System.out.println("Holve um erro ao listar todos os  itens");
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
+	
 }

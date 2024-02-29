@@ -1,7 +1,6 @@
 package com.github.thiagobritto.nfeconsult.controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.github.thiagobritto.nfeconsult.DAO.FilterListDAO;
 import com.github.thiagobritto.nfeconsult.interfaces.ControllerInterface;
@@ -27,7 +26,7 @@ public class FilterListController implements ControllerInterface {
 		FilterListModel flm = new FilterListModel( id, desc );
 	
 		// ENVIA O OBJETO PARA SALVAR E TESTA O RETORNO
-		if (DAO.save(flm)) {
+		if (DAO.save(flm) > 0) {
 			// SE CONSEGUIU SALVAR INFORMA PARA A view
 			send.setMessage("Salvo com sucesso!").resove();
 		} else {
@@ -43,7 +42,7 @@ public class FilterListController implements ControllerInterface {
 		FilterListModel flm = new FilterListModel( id, desc );
 		
 		// ENVIA O OBJETO PARA SER ATUALIZADO E TESTA O RETORNO
-		if (DAO.update(flm)) {
+		if (DAO.update(flm) > 0) {
 			// SE CONSEGUIU ATUALIZAR INFORMA PARA A view
 			send.setMessage("Atualizado ok").resove();
 		} else {
@@ -57,7 +56,7 @@ public class FilterListController implements ControllerInterface {
 		Integer id = (Integer) send.getParam(0);
 		
 		// ENVIA O ID PARA SER DELETADO E TESTA O RETORNO
-		if (DAO.delete(id)) {
+		if (DAO.delete(id) > 0) {
 			// SE CONSEGUIU DELETAR INFORMA PARA A view
 			send.setMessage("Deletado ok").resove();
 		} else {

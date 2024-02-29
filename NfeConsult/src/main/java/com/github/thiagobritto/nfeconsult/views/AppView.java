@@ -2,18 +2,21 @@ package com.github.thiagobritto.nfeconsult.views;
 
 import java.awt.EventQueue;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JDesktopPane;
+
+import com.github.thiagobritto.nfeconsult.controllers.FilterListController;
 
 public class AppView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private FilterListController flc = new FilterListController();
 	
 	/**
 	 * Launch the application.
